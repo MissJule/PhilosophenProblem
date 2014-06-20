@@ -29,7 +29,7 @@ public class Philosoph implements Runnable {
    }
 
    @Override
-   public synchronized void run() {
+   public void run() {
       while (true) {
          while (pause) {
             try {

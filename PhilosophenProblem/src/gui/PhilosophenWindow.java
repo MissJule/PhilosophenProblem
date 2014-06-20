@@ -20,152 +20,150 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
+import core.PhilosophenController;
 import core.Zustand;
 
 public class PhilosophenWindow extends JFrame {
 
-   static BufferedImage imgPhil, imgPhilosophierend, imgHunger, imgNomnom;
+	static BufferedImage imgPhil, imgPhilosophierend, imgHunger, imgNomnom;
 
-   static {
-      try {
-         imgPhil = ImageIO.read(PhilosophenWindow.class.getClassLoader()
-               .getResourceAsStream("ea6/philosophen/img/Philosoph.png"));
-         imgPhilosophierend = ImageIO.read(PhilosophenWindow.class
-               .getClassLoader().getResourceAsStream(
-                     "ea6/philosophen/img/Philosophierend.png"));
-         imgHunger = ImageIO.read(PhilosophenWindow.class.getClassLoader()
-               .getResourceAsStream("ea6/philosophen/img/Hunger.png"));
-         imgNomnom = ImageIO.read(PhilosophenWindow.class.getClassLoader()
-               .getResourceAsStream("ea6/philosophen/img/Nomnom.png"));
-      } catch (IOException e) {
-         System.out.println("Picture not found");
-         // TODO: JDialog mit ErrorMsg
-      }
-   }
+	static {
+		try {
+			imgPhil = ImageIO.read(PhilosophenWindow.class.getClassLoader()
+					.getResourceAsStream("img/Philosoph.png"));
+			imgPhilosophierend = ImageIO.read(PhilosophenWindow.class
+					.getClassLoader().getResourceAsStream(
+							"img/Philosophierend.png"));
+			imgHunger = ImageIO.read(PhilosophenWindow.class.getClassLoader()
+					.getResourceAsStream("img/Hunger.png"));
+			imgNomnom = ImageIO.read(PhilosophenWindow.class.getClassLoader()
+					.getResourceAsStream("img/Nomnom.png"));
+		} catch (IOException e) {
+			System.out.println("Picture not found");
+			// TODO: JDialog mit ErrorMsg
+		}
+	}
 
-   private JLabel lblHeader;
+	private JLabel lblHeader;
 
-   private JPanel pnlCenter, pnlBottom;
+	private JPanel pnlCenter, pnlBottom;
 
-   private JLabel[] lblPhils, lblStates;
-   JButton btnStart, btnStop;
+	private JLabel[] lblPhils, lblStates;
+	public JButton btnStart;
 
-   private ImageIcon iconPhils = new ImageIcon(imgPhil);
-   private ImageIcon iconPhilosophierend = new ImageIcon(imgPhilosophierend);
-   private ImageIcon iconHunger = new ImageIcon(imgHunger);
-   private ImageIcon iconNomnom = new ImageIcon(imgNomnom);
+	public JButton btnStop;
 
-   public PhilosophenWindow() {
+	private ImageIcon iconPhils = new ImageIcon(imgPhil);
+	private ImageIcon iconPhilosophierend = new ImageIcon(imgPhilosophierend);
+	private ImageIcon iconHunger = new ImageIcon(imgHunger);
+	private ImageIcon iconNomnom = new ImageIcon(imgNomnom);
+	private PhilosophenController ctl;
 
-      setTitle("Philosophen");
-      setDefaultCloseOperation(EXIT_ON_CLOSE);
+	public PhilosophenWindow() {
+		ctl = new PhilosophenController(this);
 
-      createWidgets();
-      addWidgets();
-      setListeners();
+		setTitle("Philosophen");
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-      pack();
-      setLocationRelativeTo(null);
+		createWidgets();
+		addWidgets();
+		setListeners();
 
-      setVisible(true);
-   }
+		pack();
+		setLocationRelativeTo(null);
 
-   private void setListeners() {
-      btnStart.addActionListener(new PhilosophenAction(this));
-      btnStop.addActionListener(new stopPhilsAction());
-   }
+		setVisible(true);
+	}
 
-   private void addWidgets() {
-      getContentPane().setLayout(new BorderLayout(5, 5));
-      getContentPane().add(BorderLayout.PAGE_START, lblHeader);
-      getContentPane().add(BorderLayout.CENTER, pnlCenter);
-      getContentPane().add(BorderLayout.PAGE_END, pnlBottom);
-      addLbls(lblStates, pnlCenter);
-      addLbls(lblPhils, pnlCenter);
-      pnlBottom.add(btnStart);
-      pnlBottom.add(btnStop);
+	private void setListeners() {
+		btnStart.addActionListener(new PhilosophenAction(this));
+		btnStop.addActionListener(new PhilosophenAction(this));
+		// btnStart.addActionListener(new PhilosophenStopAction(ctl));
+		// btnStart.addActionListener(new PhilosophenStartAction(ctl));
+	}
 
-   }
+	private void addWidgets() {
+		getContentPane().setLayout(new BorderLayout(5, 5));
+		getContentPane().add(BorderLayout.PAGE_START, lblHeader);
+		getContentPane().add(BorderLayout.CENTER, pnlCenter);
+		getContentPane().add(BorderLayout.PAGE_END, pnlBottom);
+		addLbls(lblStates, pnlCenter);
+		addLbls(lblPhils, pnlCenter);
+		pnlBottom.add(btnStart);
+		pnlBottom.add(btnStop);
 
-   private void createWidgets() {
-      lblHeader = new JLabel("Philosophen-Problem");
-      lblHeader.setFont(lblHeader.getFont().deriveFont(Font.BOLD + Font.ITALIC,
-            30));
-      lblHeader.setForeground(Color.WHITE);
-      lblHeader.setOpaque(true);
-      lblHeader.setBackground(Color.DARK_GRAY);
-      lblHeader.setHorizontalAlignment(SwingConstants.CENTER);
+	}
 
-      pnlCenter = new JPanel();
-      pnlCenter.setLayout(new GridLayout(2, 5));
+	private void createWidgets() {
+		lblHeader = new JLabel("Philosophen-Problem");
+		lblHeader.setFont(lblHeader.getFont().deriveFont(
+				Font.BOLD + Font.ITALIC, 30));
+		lblHeader.setForeground(Color.WHITE);
+		lblHeader.setOpaque(true);
+		lblHeader.setBackground(Color.DARK_GRAY);
+		lblHeader.setHorizontalAlignment(SwingConstants.CENTER);
 
-      lblStates = createLbls(iconPhilosophierend);
-      lblPhils = createLbls(iconPhils);
+		pnlCenter = new JPanel();
+		pnlCenter.setLayout(new GridLayout(2, 5));
 
-      pnlBottom = new JPanel();
-      pnlBottom.setLayout(new FlowLayout());
+		lblStates = createLbls(iconPhilosophierend);
+		lblPhils = createLbls(iconPhils);
 
-      btnStart = new JButton("Start");
-      btnStart.setHorizontalAlignment(SwingConstants.CENTER);
-      btnStop = new JButton("Stop");
-      btnStop.setHorizontalAlignment(SwingConstants.CENTER);
-      btnStop.setEnabled(false);
+		pnlBottom = new JPanel();
+		pnlBottom.setLayout(new FlowLayout());
 
-   }
+		btnStart = new JButton("Start");
+		btnStart.setHorizontalAlignment(SwingConstants.CENTER);
+		btnStop = new JButton("Stop");
+		btnStop.setHorizontalAlignment(SwingConstants.CENTER);
+		btnStop.setEnabled(false);
 
-   public void changePhilsState(int nummer, Zustand status) {
-      final int nummerNow = nummer;
-      final Zustand statusNow = status;
-      SwingUtilities.invokeLater(new Runnable() {
+	}
 
-         @Override
-         public void run() {
-            switch (statusNow) {
-            case PHILOSOPHIEREND:
-               lblStates[nummerNow].setIcon(iconPhilosophierend);
-               break;
-            case HUNGRIG:
-               lblStates[nummerNow].setIcon(iconHunger);
-               break;
-            case ESSEND:
-               lblStates[nummerNow].setIcon(iconNomnom);
-               break;
-            }
-            lblStates[nummerNow].revalidate();
-         }
+	public void changePhilsState(int nummer, Zustand status) {
+		final int nummerNow = nummer;
+		final Zustand statusNow = status;
+		SwingUtilities.invokeLater(new Runnable() {
 
-      });
+			@Override
+			public void run() {
+				switch (statusNow) {
+				case PHILOSOPHIEREND:
+					lblStates[nummerNow].setIcon(iconPhilosophierend);
+					break;
+				case HUNGRIG:
+					lblStates[nummerNow].setIcon(iconHunger);
+					break;
+				case ESSEND:
+					lblStates[nummerNow].setIcon(iconNomnom);
+					break;
+				}
+				lblStates[nummerNow].revalidate();
+			}
 
-   }
+		});
 
-   private JLabel[] createLbls(ImageIcon img) {
-      JLabel[] lbl = new JLabel[5];
-      for (int i = 0; i < 5; i++) {
-         lbl[i] = new JLabel();
-         lbl[i].setIcon(img);
-         lbl[i].setPreferredSize(new Dimension(150, 150));
-      }
-      return lbl;
-   }
+	}
 
-   private void addLbls(JLabel[] lbl, JPanel p) {
-      for (int i = 0; i < 5; i++) {
-         p.add(lbl[i]);
-      }
-   }
+	private JLabel[] createLbls(ImageIcon img) {
+		JLabel[] lbl = new JLabel[5];
+		for (int i = 0; i < 5; i++) {
+			lbl[i] = new JLabel();
+			lbl[i].setIcon(img);
+			lbl[i].setPreferredSize(new Dimension(150, 150));
+		}
+		return lbl;
+	}
 
-   private class stopPhilsAction implements ActionListener {
+	private void addLbls(JLabel[] lbl, JPanel p) {
+		for (int i = 0; i < 5; i++) {
+			p.add(lbl[i]);
+		}
+	}
 
-      @Override
-      public void actionPerformed(ActionEvent e) {
-         // wie auch immer ich die Viecher wieder stoppen kann...
 
-      }
-
-   }
-
-   public static void main(String[] args) {
-      PhilosophenWindow w = new PhilosophenWindow();
-   }
+	public static void main(String[] args) {
+		PhilosophenWindow w = new PhilosophenWindow();
+	}
 
 }
