@@ -23,6 +23,7 @@ import javax.swing.SwingUtilities;
 import core.PhilosophenController;
 import core.Zustand;
 
+@SuppressWarnings("serial")
 public class PhilosophenWindow extends JFrame {
 
 	static BufferedImage imgPhil, imgPhilosophierend, imgHunger, imgNomnom;
@@ -50,14 +51,13 @@ public class PhilosophenWindow extends JFrame {
 
 	private JLabel[] lblPhils, lblStates;
 	public JButton btnStart;
-
 	public JButton btnStop;
 
 	private ImageIcon iconPhils = new ImageIcon(imgPhil);
 	private ImageIcon iconPhilosophierend = new ImageIcon(imgPhilosophierend);
 	private ImageIcon iconHunger = new ImageIcon(imgHunger);
 	private ImageIcon iconNomnom = new ImageIcon(imgNomnom);
-	private PhilosophenController ctl;
+	private PhilosophenController ctl;	
 
 	public PhilosophenWindow() {
 		ctl = new PhilosophenController(this);
@@ -76,10 +76,36 @@ public class PhilosophenWindow extends JFrame {
 	}
 
 	private void setListeners() {
-		btnStart.addActionListener(new PhilosophenAction(this));
-		btnStop.addActionListener(new PhilosophenAction(this));
-		// btnStart.addActionListener(new PhilosophenStopAction(ctl));
-		// btnStart.addActionListener(new PhilosophenStartAction(ctl));
+		//btnStart.addActionListener(new PhilosophenAction(this));
+		//btnStop.addActionListener(new PhilosophenAction(this));
+	   
+		btnStart.addActionListener(new ActionListener() {
+         @Override
+         public void actionPerformed(ActionEvent arg0) {
+            ctl.startThreads();
+            SwingUtilities.invokeLater(new Runnable() {
+               @Override
+               public void run() {
+                  btnStart.setEnabled(false);
+                  btnStop.setEnabled(true);
+               }
+            });
+         }
+		});
+			
+		btnStop.addActionListener(new ActionListener() {
+         @Override
+         public void actionPerformed(ActionEvent e) {
+            ctl.pauseThreads();
+            SwingUtilities.invokeLater(new Runnable() {
+               @Override
+               public void run() {
+                  btnStop.setEnabled(false);
+                  btnStart.setEnabled(true);
+               }
+            });
+         }
+		});
 	}
 
 	private void addWidgets() {
