@@ -9,6 +9,7 @@ public class Philosoph implements Runnable {
    int nummer;
    private PhilosophenWindow currentWindow;
    boolean pause = false;
+   static Object lock = "";
 
    public Philosoph(int nummer, Staebchen staebchenLinks,
          Staebchen staebchenRechts, PhilosophenWindow currentWindow) {
@@ -19,23 +20,29 @@ public class Philosoph implements Runnable {
       this.currentWindow = currentWindow;
    }
 
-   public synchronized void makePause() {
-      pause = true;
+   public void makePause() {
+      synchronized (lock) {
+         pause = true;
+      }
    }
 
-   public synchronized void continueToRun() {
-      pause = false;
-      notify();
+   public void continueToRun() {
+      synchronized (lock) {
+         pause = false;
+         lock.notify();
+      }
    }
 
    @Override
    public void run() {
       while (true) {
          while (pause) {
-            try {
-               this.wait();
-            } catch (InterruptedException e) {
-               System.out.println("wait funkt nicht!");
+            synchronized (lock) {
+               try {
+                  lock.wait();
+               } catch (InterruptedException e) {
+                  System.out.println("Interrupted while waiting");
+               }
             }
          }
          switch (status) {

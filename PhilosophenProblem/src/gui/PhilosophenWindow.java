@@ -46,12 +46,9 @@ public class PhilosophenWindow extends JFrame {
 	}
 
 	private JLabel lblHeader;
-
 	private JPanel pnlCenter, pnlBottom;
-
 	private JLabel[] lblPhils, lblStates;
-	public JButton btnStart;
-	public JButton btnStop;
+	JButton btnStart, btnStop; // TODO
 
 	private ImageIcon iconPhils = new ImageIcon(imgPhil);
 	private ImageIcon iconPhilosophierend = new ImageIcon(imgPhilosophierend);
