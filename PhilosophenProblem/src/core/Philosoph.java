@@ -8,16 +8,18 @@ public class Philosoph implements Runnable {
    Zustand status;
    int nummer;
    private PhilosophenWindow currentWindow;
+   private Tisch tisch;
    boolean pause = false;
    static Object lock = "";
 
    public Philosoph(int nummer, Staebchen staebchenLinks,
-         Staebchen staebchenRechts, PhilosophenWindow currentWindow) {
+         Staebchen staebchenRechts, PhilosophenWindow currentWindow, Tisch tisch) {
       this.nummer = nummer;
       this.staebchenLinks = staebchenLinks;
       this.staebchenRechts = staebchenRechts;
       this.status = Zustand.PHILOSOPHIEREND;
       this.currentWindow = currentWindow;
+      this.tisch = tisch;
    }
 
    public void makePause() {
@@ -55,6 +57,15 @@ public class Philosoph implements Runnable {
             } catch (InterruptedException e) {
                e.printStackTrace();
             }
+            synchronized (tisch) {
+               if (!tisch.aufsicht()) {
+                  try {
+                     tisch.wait();
+                  } catch (InterruptedException e) {
+                     e.printStackTrace();
+                  }
+               }
+            }
             status = Zustand.HUNGRIG;
             break;
          case HUNGRIG:
@@ -85,6 +96,9 @@ public class Philosoph implements Runnable {
             staebchenLinks.staebchenZuruecklegen();
             staebchenRechts.staebchenZuruecklegen();
             status = Zustand.PHILOSOPHIEREND;
+            synchronized (tisch) {
+               tisch.notifyAll();
+            }
             break;
          }
       }

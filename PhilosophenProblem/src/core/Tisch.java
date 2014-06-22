@@ -1,18 +1,27 @@
 package core;
 
-import javax.swing.SwingUtilities;
-
 import gui.PhilosophenWindow;
 
-public class PhilosophenController {
+public class Tisch {
 
    private Philosoph[] philosophen = new Philosoph[5];
    private Staebchen[] staebchen = new Staebchen[5];
    private boolean alreadyStarted = false;
    private PhilosophenWindow currentWindow;
 
-   public PhilosophenController(PhilosophenWindow currentWindow) {
+   public Tisch(PhilosophenWindow currentWindow) {
       this.currentWindow = currentWindow;
+   }
+
+   boolean aufsicht() {
+      int count = 0;
+      for (int i = 0; i < philosophen.length; i++) {
+         if (philosophen[i].status == Zustand.HUNGRIG
+               || philosophen[i].status == Zustand.ESSEND) {
+            count++;
+         }
+      }
+      return (count < 4);
    }
 
    public void pauseThreads() {
@@ -48,7 +57,7 @@ public class PhilosophenController {
       // ordne den Philosophen ihr linkes und rechtes Staebchen zu
       for (int i = 0; i < philosophen.length; i++) {
          philosophen[i] = new Philosoph(i, staebchen[(i + 4) % 5],
-               staebchen[i % 5], currentWindow);
+               staebchen[i % 5], currentWindow, this);
       }
       System.out.println("Philosophen erzeugt");
       // starte Philosophen-Threads

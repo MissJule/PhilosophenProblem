@@ -20,63 +20,61 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
-import core.PhilosophenController;
+import core.Tisch;
 import core.Zustand;
 
 @SuppressWarnings("serial")
 public class PhilosophenWindow extends JFrame {
 
-	static BufferedImage imgPhil, imgPhilosophierend, imgHunger, imgNomnom;
+   static BufferedImage imgPhil, imgPhilosophierend, imgHunger, imgNomnom;
 
-	static {
-		try {
-			imgPhil = ImageIO.read(PhilosophenWindow.class.getClassLoader()
-					.getResourceAsStream("img/Philosoph.png"));
-			imgPhilosophierend = ImageIO.read(PhilosophenWindow.class
-					.getClassLoader().getResourceAsStream(
-							"img/Philosophierend.png"));
-			imgHunger = ImageIO.read(PhilosophenWindow.class.getClassLoader()
-					.getResourceAsStream("img/Hunger.png"));
-			imgNomnom = ImageIO.read(PhilosophenWindow.class.getClassLoader()
-					.getResourceAsStream("img/Nomnom.png"));
-		} catch (IOException e) {
-			System.out.println("Picture not found");
-			// TODO: JDialog mit ErrorMsg
-		}
-	}
+   static {
+      try {
+         imgPhil = ImageIO.read(PhilosophenWindow.class.getClassLoader()
+               .getResourceAsStream("img/Philosoph.png"));
+         imgPhilosophierend = ImageIO
+               .read(PhilosophenWindow.class.getClassLoader()
+                     .getResourceAsStream("img/Philosophierend.png"));
+         imgHunger = ImageIO.read(PhilosophenWindow.class.getClassLoader()
+               .getResourceAsStream("img/Hunger.png"));
+         imgNomnom = ImageIO.read(PhilosophenWindow.class.getClassLoader()
+               .getResourceAsStream("img/Nomnom.png"));
+      } catch (IOException e) {
+         System.out.println("Picture not found");
+         // TODO: JDialog mit ErrorMsg
+      }
+   }
 
-	private JLabel lblHeader;
-	private JPanel pnlCenter, pnlBottom;
-	private JLabel[] lblPhils, lblStates;
-	JButton btnStart, btnStop; // TODO
+   private JLabel lblHeader;
+   private JPanel pnlCenter, pnlBottom;
+   private JLabel[] lblPhils, lblStates;
+   private JButton btnStart, btnStop;
 
-	private ImageIcon iconPhils = new ImageIcon(imgPhil);
-	private ImageIcon iconPhilosophierend = new ImageIcon(imgPhilosophierend);
-	private ImageIcon iconHunger = new ImageIcon(imgHunger);
-	private ImageIcon iconNomnom = new ImageIcon(imgNomnom);
-	private PhilosophenController ctl;	
+   private ImageIcon iconPhils = new ImageIcon(imgPhil);
+   private ImageIcon iconPhilosophierend = new ImageIcon(imgPhilosophierend);
+   private ImageIcon iconHunger = new ImageIcon(imgHunger);
+   private ImageIcon iconNomnom = new ImageIcon(imgNomnom);
+   private Tisch ctl;
 
-	public PhilosophenWindow() {
-		ctl = new PhilosophenController(this);
+   public PhilosophenWindow() {
+      ctl = new Tisch(this);
 
-		setTitle("Philosophen");
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+      setTitle("Philosophen");
+      setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-		createWidgets();
-		addWidgets();
-		setListeners();
+      createWidgets();
+      addWidgets();
+      setListeners();
 
-		pack();
-		setLocationRelativeTo(null);
+      pack();
+      setLocationRelativeTo(null);
 
-		setVisible(true);
-	}
+      setVisible(true);
+   }
 
-	private void setListeners() {
-		//btnStart.addActionListener(new PhilosophenAction(this));
-		//btnStop.addActionListener(new PhilosophenAction(this));
-	   
-		btnStart.addActionListener(new ActionListener() {
+   private void setListeners() {
+
+      btnStart.addActionListener(new ActionListener() {
          @Override
          public void actionPerformed(ActionEvent arg0) {
             ctl.startThreads();
@@ -88,9 +86,9 @@ public class PhilosophenWindow extends JFrame {
                }
             });
          }
-		});
-			
-		btnStop.addActionListener(new ActionListener() {
+      });
+
+      btnStop.addActionListener(new ActionListener() {
          @Override
          public void actionPerformed(ActionEvent e) {
             ctl.pauseThreads();
@@ -102,91 +100,90 @@ public class PhilosophenWindow extends JFrame {
                }
             });
          }
-		});
-	}
+      });
+   }
 
-	private void addWidgets() {
-		getContentPane().setLayout(new BorderLayout(5, 5));
-		getContentPane().add(BorderLayout.PAGE_START, lblHeader);
-		getContentPane().add(BorderLayout.CENTER, pnlCenter);
-		getContentPane().add(BorderLayout.PAGE_END, pnlBottom);
-		addLbls(lblStates, pnlCenter);
-		addLbls(lblPhils, pnlCenter);
-		pnlBottom.add(btnStart);
-		pnlBottom.add(btnStop);
+   private void addWidgets() {
+      getContentPane().setLayout(new BorderLayout(5, 5));
+      getContentPane().add(BorderLayout.PAGE_START, lblHeader);
+      getContentPane().add(BorderLayout.CENTER, pnlCenter);
+      getContentPane().add(BorderLayout.PAGE_END, pnlBottom);
+      addLbls(lblStates, pnlCenter);
+      addLbls(lblPhils, pnlCenter);
+      pnlBottom.add(btnStart);
+      pnlBottom.add(btnStop);
 
-	}
+   }
 
-	private void createWidgets() {
-		lblHeader = new JLabel("Philosophen-Problem");
-		lblHeader.setFont(lblHeader.getFont().deriveFont(
-				Font.BOLD + Font.ITALIC, 30));
-		lblHeader.setForeground(Color.WHITE);
-		lblHeader.setOpaque(true);
-		lblHeader.setBackground(Color.DARK_GRAY);
-		lblHeader.setHorizontalAlignment(SwingConstants.CENTER);
+   private void createWidgets() {
+      lblHeader = new JLabel("Philosophen-Problem");
+      lblHeader.setFont(lblHeader.getFont().deriveFont(Font.BOLD + Font.ITALIC,
+            30));
+      lblHeader.setForeground(Color.WHITE);
+      lblHeader.setOpaque(true);
+      lblHeader.setBackground(Color.DARK_GRAY);
+      lblHeader.setHorizontalAlignment(SwingConstants.CENTER);
 
-		pnlCenter = new JPanel();
-		pnlCenter.setLayout(new GridLayout(2, 5));
+      pnlCenter = new JPanel();
+      pnlCenter.setLayout(new GridLayout(2, 5));
 
-		lblStates = createLbls(iconPhilosophierend);
-		lblPhils = createLbls(iconPhils);
+      lblStates = createLbls(iconPhilosophierend);
+      lblPhils = createLbls(iconPhils);
 
-		pnlBottom = new JPanel();
-		pnlBottom.setLayout(new FlowLayout());
+      pnlBottom = new JPanel();
+      pnlBottom.setLayout(new FlowLayout());
 
-		btnStart = new JButton("Start");
-		btnStart.setHorizontalAlignment(SwingConstants.CENTER);
-		btnStop = new JButton("Stop");
-		btnStop.setHorizontalAlignment(SwingConstants.CENTER);
-		btnStop.setEnabled(false);
+      btnStart = new JButton("Start");
+      btnStart.setHorizontalAlignment(SwingConstants.CENTER);
+      btnStop = new JButton("Stop");
+      btnStop.setHorizontalAlignment(SwingConstants.CENTER);
+      btnStop.setEnabled(false);
 
-	}
+   }
 
-	public void changePhilsState(int nummer, Zustand status) {
-		final int nummerNow = nummer;
-		final Zustand statusNow = status;
-		SwingUtilities.invokeLater(new Runnable() {
+   public void changePhilsState(int nummer, Zustand status) {
+      final int nummerNow = nummer;
+      final Zustand statusNow = status;
+      SwingUtilities.invokeLater(new Runnable() {
 
-			@Override
-			public void run() {
-				switch (statusNow) {
-				case PHILOSOPHIEREND:
-					lblStates[nummerNow].setIcon(iconPhilosophierend);
-					break;
-				case HUNGRIG:
-					lblStates[nummerNow].setIcon(iconHunger);
-					break;
-				case ESSEND:
-					lblStates[nummerNow].setIcon(iconNomnom);
-					break;
-				}
-				lblStates[nummerNow].revalidate();
-			}
+         @Override
+         public void run() {
+            switch (statusNow) {
+            case PHILOSOPHIEREND:
+               lblStates[nummerNow].setIcon(iconPhilosophierend);
+               break;
+            case HUNGRIG:
+               lblStates[nummerNow].setIcon(iconHunger);
+               break;
+            case ESSEND:
+               lblStates[nummerNow].setIcon(iconNomnom);
+               break;
+            }
+            lblStates[nummerNow].revalidate();
+         }
 
-		});
+      });
 
-	}
+   }
 
-	private JLabel[] createLbls(ImageIcon img) {
-		JLabel[] lbl = new JLabel[5];
-		for (int i = 0; i < 5; i++) {
-			lbl[i] = new JLabel();
-			lbl[i].setIcon(img);
-			lbl[i].setPreferredSize(new Dimension(150, 150));
-		}
-		return lbl;
-	}
+   private JLabel[] createLbls(ImageIcon img) {
+      JLabel[] lbl = new JLabel[5];
+      for (int i = 0; i < 5; i++) {
+         lbl[i] = new JLabel();
+         lbl[i].setIcon(img);
+         lbl[i].setPreferredSize(new Dimension(150, 150));
+      }
+      return lbl;
+   }
 
-	private void addLbls(JLabel[] lbl, JPanel p) {
-		for (int i = 0; i < 5; i++) {
-			p.add(lbl[i]);
-		}
-	}
+   private void addLbls(JLabel[] lbl, JPanel p) {
+      for (int i = 0; i < 5; i++) {
+         p.add(lbl[i]);
+      }
+   }
 
-
-	public static void main(String[] args) {
-		PhilosophenWindow w = new PhilosophenWindow();
-	}
+   public static void main(String[] args) {
+      PhilosophenWindow w = new PhilosophenWindow();
+   }
 
 }
